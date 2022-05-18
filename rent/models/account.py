@@ -1,3 +1,5 @@
+import json
+
 from django.db import models
 from django_celery_beat.models import PeriodicTask, CrontabSchedule
 from rent.models.unit import Unit
@@ -11,14 +13,19 @@ class Account(models.Model):
     closed = models.BooleanField(default=False)
 
     def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
         if self.billing_period is not None:
             if self.periodic_billing_job is None:
                 self.periodic_billing_job = PeriodicTask()
             self.periodic_billing_job.name = f'Generate Bill for Account [{self.id}]'
             self.periodic_billing_job.crontab = self.billing_period
             self.periodic_billing_job.task = 'generate_bill'
-            self.periodic_billing_job.kwargs = {
+            self.periodic_billing_job.kwargs = json.dumps({
                 'tenant_id': self.id,
-            }
+            })
+            self.periodic_billing_job.enabled = not self.closed
             self.periodic_billing_job.save(*args, **kwargs)
         super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.apartment.__str__()
