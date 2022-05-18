@@ -4,6 +4,7 @@ from rent.models import Property, Unit
 
 class UnitInline(admin.TabularInline):
     model = Unit
+    show_change_link = True
 
     def has_delete_permission(self, request, obj=None):
         return False
