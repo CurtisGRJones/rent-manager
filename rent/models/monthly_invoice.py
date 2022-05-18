@@ -7,7 +7,8 @@ class MonthlyInvoice(models.Model):
     tenant = models.ForeignKey(Tenant, on_delete=models.SET_NULL, null=True)
     tenant_name = models.CharField(max_length=33, null=False)
     amount = models.DecimalField(max_digits=7, decimal_places=2, null=False)
-    day_due = models.IntegerField(null=False)
+    date_due = models.DateField()
+
 
     def save(
         self, *args, **kwargs

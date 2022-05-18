@@ -7,17 +7,13 @@ class TenantAdmin(admin.ModelAdmin):
     fields = [
         'first_name',
         'last_name',
-        'current',
-        'rent',
-        'apartment',
         'phone_number',
         'email',
     ]
 
     list_display = [
         '__str__',
-        'apartment',
-        'rent',
+        'account',
         'phone_number',
         'email',
         'id',

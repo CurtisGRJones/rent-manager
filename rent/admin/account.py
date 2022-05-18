@@ -1,9 +1,9 @@
 from django.contrib import admin
-from rent.models import Unit, Account
+from rent.models import Tenant, Account
 
 
-class AccountInline(admin.TabularInline):
-    model = Account
+class TenantInline(admin.TabularInline):
+    model = Tenant
     show_change_link = True
 
     def has_delete_permission(self, request, obj=None):
@@ -13,19 +13,19 @@ class AccountInline(admin.TabularInline):
         return False
 
 
-@admin.register(Unit)
-class UnitAdmin(admin.ModelAdmin):
+@admin.register(Account)
+class AccountAdmin(admin.ModelAdmin):
     fields = [
-        'property',
-        'unit',
+        'rent',
+        'apartment',
+        'billing_period',
+        'closed'
     ]
 
     list_display = [
         '__str__',
-        'property_address',
-        'id',
     ]
 
     inlines = [
-        AccountInline,
+        TenantInline,
     ]
